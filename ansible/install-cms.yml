@@ -8,16 +8,16 @@
       include_vars: ../provision/cms.yml
     - name: add SSH key to authorized keys for root
       authorized_key: user=root
-                      key="{{ lookup('file', '../provision/setup/id_rsa.pub') }}"
+        key="{{ lookup('file', '../provision/setup/id_rsa.pub') }}"
     - name: add CMS user
       user: name="{{ CMS.USER }}"
     - name: add SSH key to authorized keys for root
       authorized_key: user="{{ CMS.USER }}"
-                      key="{{ lookup('file', '../provision/setup/id_rsa.pub') }}"
+        key="{{ lookup('file', '../provision/setup/id_rsa.pub') }}"
     - name: copy provision directory
       synchronize: mode=pull
-                   src=../provision
-                   dest={{ CMS.USER }}@{{ ansible_host }}:/tmp
+        src=../provision
+        dest={{ CMS.USER }}@{{ ansible_host }}:/tmp
     - name: run basic setup
       script: ../provision/setup/setup.sh
     - name: restart machine
@@ -26,11 +26,11 @@
       poll: 0
     - name: waiting for server to come back
       local_action: wait_for state=started delay=30 timeout=90
-                             connect_timeout=15
+        connect_timeout=15
     - name: copy provision directory
       synchronize: mode=pull
-                   src=../provision
-                   dest={{ CMS.USER }}@{{ ansible_host }}:/tmp
+        src=../provision
+        dest={{ CMS.USER }}@{{ ansible_host }}:/tmp
     - name: run basic user setup
       become: yes
       become_method: su

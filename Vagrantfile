@@ -32,10 +32,6 @@ Vagrant.configure("2") do |config|
   ## See: https://github.com/mitchellh/vagrant/issues/1673
   config.vm.provision :shell, \
     inline: "cp /vagrant/provision/setup/root_profile /root/.profile"
-  config.vm.provision :shell, \
-    inline: "cat /vagrant/provision/setup/id_rsa.pub >> /root/.ssh/authorized_keys"
-  config.vm.provision :shell, privileged: false, \
-    inline: "cat /vagrant/provision/setup/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys"
   ############################################################################
 
   ############################################################################
@@ -48,7 +44,8 @@ Vagrant.configure("2") do |config|
       inline: "rsync -a '/vagrant/provision' '/tmp'"
 
     cms_provision.vm.provision :shell, \
-      inline: "adduser --disabled-password --gecos '' #{cms_config['CMS']['USER']}"
+      inline: "adduser --disabled-password --gecos '' \
+                  #{cms_config['CMS']['USER']}"
 
     ## install basic packages and restart
     cms_provision.vm.provision :shell, path: "provision/setup/setup.sh"
@@ -69,6 +66,10 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "cms_ansible" do |cms_ansible|
     cms_ansible.vm.hostname = 'cms-ansible'
+
+    cms_ansible.vm.provision :shell, \
+      inline: "cat /vagrant/provision/setup/id_rsa.pub >> \
+                    /root/.ssh/authorized_keys"
 
     cms_ansible.vm.provision :shell, \
       inline: "cp /vagrant/provision/setup/91-disable-requiretty \
