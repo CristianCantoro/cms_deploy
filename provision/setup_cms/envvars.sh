@@ -49,7 +49,13 @@ function parse_yaml() {
 # PROVISION_DIR='/tmp/provision'
 
 # Read YAML config file
-eval "$(parse_yaml ../cms.yml '')"
+
+envars_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROVISION_DIR="$(dirname "${envars_path}")"
+
+eval "$(parse_yaml "${envars_path}/../cms.yml" '')"
+
+unset envars_path
 
 ##############################################################################
 

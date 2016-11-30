@@ -11,6 +11,3 @@ CMS:
   USER_HOME: "/home/$CMS_USER"
   BASEDIR: "$CMS_USER_HOME/cms"
   DATADIR: /data
-
-PROVISION:
-   DIR: /tmp/provision
