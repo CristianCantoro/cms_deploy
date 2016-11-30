@@ -1,5 +1,14 @@
+# encoding: utf-8
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+
+require 'yaml'
+
+current_dir = File.dirname(File.expand_path(__FILE__))
+cms_config_file = "cms.yml"
+cms_config = YAML.load_file(File.join("#{current_dir}",
+                                      "provision",
+                                      "#{cms_config_file}"))
 
 Vagrant.configure("2") do |config|
   config.vm.define "default"
@@ -35,15 +44,18 @@ Vagrant.configure("2") do |config|
   config.vm.define "cms_provision" do |cms_provision|
     cms_provision.vm.hostname = 'cms-provision'
 
-    cms_provision.vm.provision :shell, privileged: false, \
+    cms_provision.vm.provision :shell, \
       inline: "rsync -a '/vagrant/provision' '/tmp'"
+
+    cms_provision.vm.provision :shell, \
+      inline: "adduser --disabled-password --gecos '' #{cms_config['CMS']['USER']}"
 
     ## install basic packages and restart
     cms_provision.vm.provision :shell, path: "provision/setup/setup.sh"
     cms_provision.vm.provision :reload
 
     ## install user config
-    cms_provision.vm.provision :shell, privileged: false, \
+    cms_provision.vm.provision :shell, \
       inline: "rsync -a '/vagrant/provision' '/tmp'"
     cms_provision.vm.provision :shell, privileged: false, \
       path: "provision/setup/setup_user.sh"
