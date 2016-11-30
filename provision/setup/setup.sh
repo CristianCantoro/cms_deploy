@@ -45,7 +45,7 @@ function install_oh_my_zsh {
 
     # change zsh theme
     sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="bira"/' \
-      "$change_user_home/.zshrc" > "$change_user_home/zshrc.new"
+      "$change_user_home/.zshrc"
 
     # make sure that .zshrc is owned by user
     chown "$change_user:$change_user" "$change_user_home/.zshrc"
@@ -56,10 +56,12 @@ function install_oh_my_zsh {
   fi
 
   # remove install script, goodbye
-  rm -f "$change_user_home/zshrc.new" "$change_user_home/install_ohmyzsh.sh"
+  rm -f "$change_user_home/install_ohmyzsh.sh"
 
+  set +eu
+  source "$change_user_home/.zshrc"
+  set -eu
 }
-
 
 # no dialogw or questions
 export DEBIAN_FRONTEND=noninteractive
