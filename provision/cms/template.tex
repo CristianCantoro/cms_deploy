@@ -1,0 +1,50 @@
+\documentclass{article}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{graphicx,grffile}
+\usepackage[italian]{babel}
+\usepackage{fancyvrb}
+\usepackage{booktabs}
+\usepackage[left=2cm, right=2cm, bottom=3cm]{geometry}
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\renewcommand\thesection{} 			% Niente numeri attorno alle section
+\renewcommand\thesubsection{} 		% Niente numeri attorno alle subsection
+\setlength\parindent{0pt}
+
+
+\begin{document}
+\noindent {\Large Algoritmi e Strutture Dati}
+\vspace{0.5cm}
+
+\noindent {\Huge $titolo$ (\texttt{$breve$}$if(tempo)$, $tempo$ s$endif$)}
+
+$body$
+
+\section{Esempi di input/output}
+
+$for(samples)$
+    \noindent
+    \begin{tabular}{p{11cm}|p{5cm}}
+    \toprule
+    \textbf{File \texttt{input.txt}}
+    & \textbf{File \texttt{output.txt}}
+    \\
+    \midrule
+    \scriptsize
+   \VerbatimInput{$samples.input$}
+    &
+    \scriptsize
+   \VerbatimInput{$samples.output$}
+    \\
+    \bottomrule
+    \end{tabular}
+    \newline
+$endfor$
+
+\end{document}

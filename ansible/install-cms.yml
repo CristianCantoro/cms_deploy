@@ -1,0 +1,36 @@
+---
+- hosts: cms_servers
+  remote_user: root
+  vars:
+      ansible_ssh_pipelining: yes
+  include_vars: ../cms.yml
+  tasks:
+    - name: add SSH key to authorized keys for root
+      authorized_key:
+        user=root
+        key="{{ lookup('file', '../provision/setup/id_rsa.pub') }}"
+        state=present
+    - name: add CMS user
+      user: name={{ CMS_USER }}
+    - name: copy provision directory
+      synchronize: src=../provision dest=/tmp
+    - name: run basic setup
+      script: ../provision/setup/setup.sh
+    - name: restart machine
+      shell: reboot
+      async: 0
+      poll: 0
+    - name: waiting for server to come back
+      local_action: wait_for state=started delay=30 timeout=90
+                             connect_timeout=15
+    - name: copy provision directory
+      synchronize: src=../provision dest=/tmp
+    - name: run basic user setup
+      become: yes
+      become_method: su
+      become_user: vagrant
+      script: ../provision/setup/setup_user.sh
+    - name: provision CMS
+      script: ../provision/setup_cms/provision_cms.sh
+    - name: provision CMSDB
+      script: ../provision/setup_cms/provision_cmsdb.sh

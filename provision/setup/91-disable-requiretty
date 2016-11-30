@@ -1,0 +1,4 @@
+Defaults:vagrant !requiretty
+Defaults:root    !requiretty
+Defaults!/usr/bin/ssh !requiretty
+

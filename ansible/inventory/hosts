@@ -1,0 +1,10 @@
+# This is the hosts file for ansible.
+#
+#   - Comments begin with the '#' character
+#   - Blank lines are ignored
+#   - Groups of hosts are delimited by [header] elements
+#   - You can enter hostnames or ip addresses
+#   - A hostname/ip can be a member of multiple groups
+
+[cms_servers]
+cms_ansible   ansible_host=127.0.0.1    ansible_port=2222     ansible_ssh_user=root

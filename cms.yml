@@ -1,0 +1,16 @@
+---
+CMS:
+  ## CMS variables
+  VERSION: 1.2.0
+  INSTALL_FILE: cms_v1.2.0.tar.gz
+  HASHSUM_FILE: cms_v1.2.0.tar.gz.sha256sum
+  USER: cms
+  USERGROUP: cmsuser
+
+  ## CMS dirs
+  USER_HOME: "/home/$CMS_USER"
+  BASEDIR: "$CMS_USER_HOME/cms"
+  DATADIR: /data
+
+PROVISION:
+   DIR: /tmp/provision

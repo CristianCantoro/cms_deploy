@@ -1,0 +1,6 @@
+# ignore Vagrant stuff
+.vagrant/
+
+# testing
+asd16/
+
