@@ -9,6 +9,8 @@ cms_config_file = "cms.yml"
 cms_config = YAML.load_file(File.join("#{current_dir}",
                                       "provision",
                                       "#{cms_config_file}"))
+cms_user = cms_config['CMS']['USER']
+cms_usergroup = cms_config['CMS']['USERGROUP']
 
 Vagrant.configure("2") do |config|
   config.vm.define "default"
@@ -44,8 +46,8 @@ Vagrant.configure("2") do |config|
       inline: "rsync -a '/vagrant/provision' '/tmp'"
 
     cms_provision.vm.provision :shell, \
-      inline: "adduser --disabled-password --gecos '' \
-                  #{cms_config['CMS']['USER']}"
+      inline: "id -u cms &>/dev/null || \
+               adduser --disabled-password --gecos '' #{cms_user}"
 
     ## install basic packages and restart
     cms_provision.vm.provision :shell, path: "provision/setup/setup.sh"
@@ -54,14 +56,28 @@ Vagrant.configure("2") do |config|
     ## install user config
     cms_provision.vm.provision :shell, \
       inline: "rsync -a '/vagrant/provision' '/tmp'"
-    cms_provision.vm.provision :shell, privileged: false, \
-      path: "provision/setup/setup_user.sh"
+    cms_provision.vm.provision :shell,
+      inline: "su -c '/tmp/provision/setup/setup_user.sh' #{cms_user}"
 
-    ## provisioning script
+    ## CMS provisioning script
     cms_provision.vm.provision :shell, \
       path: "provision/setup_cms/provision_cms.sh"
     cms_provision.vm.provision :shell, \
       path: "provision/setup_cms/provision_cmsdb.sh"
+
+    ## add upstart script
+    cms_provision.vm.provision :shell, \
+      inline: "cp /tmp/provision/upstart/cms.conf \
+                  /etc/init/cms.conf"
+    cms_provision.vm.provision :shell, \
+      inline: "chown #{cms_user}:#{cms_usergroup} /etc/init/cms.conf"
+    cms_provision.vm.provision :shell, \
+      inline: "chmod 644 /etc/init/cms.conf"
+
+    ## provision nginx
+    cms_provision.vm.provision :shell, \
+      path: "provision/nginx/provision_nginx.sh"
+
   end
 
   config.vm.define "cms_ansible" do |cms_ansible|
