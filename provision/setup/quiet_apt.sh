@@ -14,3 +14,10 @@ function quiet_install {
     apt-get -qq -y "$quiet_dpkg" install "$@" &>/dev/null
 }
 
+function quiet_remove {
+    apt-get -qq -y "$quiet_dpkg" remove "$@" &>/dev/null
+}
+
+function quiet_purge {
+    apt-get -qq -y "$quiet_dpkg" purge "$@" &>/dev/null
+}

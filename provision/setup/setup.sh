@@ -101,6 +101,9 @@ quiet_install htop tree lynx colordiff tmux zsh git-core molly-guard \
               apt-transport-https ca-certificates software-properties-common
 echo "basic packages installed"
 
+quiet_purge 'apache2*'
+echo "purging apache2 installation"
+
 add-apt-repository -y ppa:neovim-ppa/unstable
 quiet_install
 quiet_update && quiet_install neovim

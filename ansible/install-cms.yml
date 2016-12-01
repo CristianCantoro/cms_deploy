@@ -44,3 +44,6 @@
       copy: src=../provision/upstart/cms.conf
             dest=/etc/iniit/cms.conf
             owner={{ CMS.USER }} group={{ CMS.USERGROUP }} mode=0644
+    - name: provision nginx
+      script: ../provision/nginx/provision_nginx.sh
+
