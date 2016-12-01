@@ -67,16 +67,6 @@ echo "CMS optional dependencies installed"
 apt-get -qq -y autoremove &>/dev/null
 echo "clean system (apt-get autoremove)"
 
-# create basedir
-mkdir -p "$CMS_BASEDIR"
-chown "$CMS_USER:$CMS_USER" "$CMS_BASEDIR"
-echo "created CMS base dir"
-
-# add data dir
-mkdir -p "$CMS_DATADIR"
-chown "$CMS_USER:$CMS_USER" "$CMS_DATADIR"
-echo "created CMS data dir"
-
 # clean up builds (just in case)
 cd "$CMS_BASEDIR" && rm -rf 'cms.egg-info/' && rm -rf 'build/'
 echo "cleanup build"
@@ -102,10 +92,38 @@ cd "$CMS_BASEDIR" && ./setup.py install
 usermod -a -G "$CMS_USERGROUP" "$CMS_USER"
 echo "add user '$CMS_USER' to CMS user group '$CMS_USERGROUP'"
 
-# add user to cmsuser group
+# create basedir
+mkdir -p "$CMS_BASEDIR"
 chown "$CMS_USER:$CMS_USERGROUP" "$CMS_BASEDIR"
+echo "created CMS base dir"
+
+# add data dir
+mkdir -p "$CMS_DATADIR"
 chown "$CMS_USER:$CMS_USERGROUP" "$CMS_DATADIR"
-echo "changed owner to base dir ($CMS_BASEDIR) and data dir ($CMS_DATADIR) "
-echo "to $CMS_USER:$CMS_USERGROUP"
+echo "created CMS data dir"
+
+# add tmp dir in datadir
+mkdir -p "$CMS_DATADIR/tmp"
+chown "$CMS_USER:$CMS_USERGROUP" "$CMS_DATADIR/tmp"
+echo "created tmp dir for CMS in datadir"
+
+cp -r "$PROVISION_DIR/cms/scripts" "$CMS_USER_HOME/.scripts"
+chown -R "$CMS_USER:$CMS_USERGROUP" "$CMS_USER_HOME/.scripts"
+cp "$PROVISION_DIR/cms/scripts/contest_id" "$CMS_USER_HOME/contest_id"
+chown "$CMS_USER:$CMS_USERGROUP" "$CMS_USER_HOME/contest_id"
+echo "copied scripts dir in '$CMS_USER_HOME'"
+
+# /var/local/cache/cms -> /data/cache/cms
+mkdir -p "$CMS_DATADIR/cache/cms"
+rsync -Caz '/var/local/cache/cms/' "$CMS_DATADIR/cache/cms"
+chown -R "$CMS_USER:$CMS_USERGROUP" "$CMS_DATADIR/cache"
+chmod -R g+rwx "$CMS_DATADIR/cache/cms"
+echo "created cache dir for CMS in datadir"
+
+rm -rf '/var/local/cache/cms'
+[[ ! -L '/var/local/cache/cms' ]] && \
+  ln -s "$CMS_DATADIR/cache/cms" '/var/local/cache/cms'
+echo "linked cache dir from '/var/local/cache/cms' to" \
+     "'$CMS_DATADIR/cache/cms'"
 
 exit 0
