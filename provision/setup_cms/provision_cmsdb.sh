@@ -24,10 +24,28 @@ echo "- CMS_DBUSER: $CMS_DBUSER"
 echo "- CMS_DBHOST: $CMS_DBHOST"
 echo "--------"
 
+# move postgres data dir to CMS datadir
+service postgresql stop
+
+mkdir -p "$CMS_DATADIR/postgresql"
+rsync -Caz '/var/lib/postgresql/' "$CMS_DATADIR/postgresql"
+echo "created postgres data dir '$CMS_DATADIR/postgresql'"
+
+chown -R 'postgres:postgres' "$CMS_DATADIR/postgresql"
+chmod -R 0700 "$CMS_DATADIR/postgresql/9.3/main"
+
+cp "$PROVISION_DIR/postgresql/postgresql.conf" \
+  '/etc/postgresql/9.3/main/postgresql.conf'
+rm -rf '/var/lib/postgresql'
+[[ ! -L '/var/lib/postgresql' ]] && \
+  ln -s "$CMS_DATADIR/postgresql" '/var/lib/postgresql'
+
+service postgresql start
+
 # copy .pgpass
-cp "$PROVISION_DIR/postgres/.pgpass"  "$CMS_USER_HOME"
-chmod 600 "$PROVISION_DIR/postgres/.pgpass"
-chown "$CMS_USER:$CMS_USER" "$PROVISION_DIR/postgres/.pgpass"
+cp "$PROVISION_DIR/postgresql/.pgpass"  "$CMS_USER_HOME"
+chmod 600 "$PROVISION_DIR/postgresql/.pgpass"
+chown "$CMS_USER:$CMS_USER" "$PROVISION_DIR/postgresql/.pgpass"
 echo ".pgpass file copied"
 
 echo -n "create CMS DB user '$CMS_DBUSER': "
