@@ -8,6 +8,14 @@ CMS:
   USERGROUP: cmsuser
 
   ## CMS dirs
-  USER_HOME: "/home/$CMS_USER"
-  BASEDIR: "$CMS_USER_HOME/cms"
+  # Neither Vagrantfiles, nor Ansible playbooks are able to resolve variables
+  # within YAML files, so something like the following:
+  # ---
+  #   USER_HOME: "/home/${CMS_USER}"
+  #   BASEDIR: "${CMS_USER_HOME}/cms"
+  # ---
+  # would work in the install script when the YAML file is read by the shell,
+  # but it should not be relied upon.
+  USER_HOME: /home/cms
+  BASEDIR: /home/cms/cms
   DATADIR: /data
