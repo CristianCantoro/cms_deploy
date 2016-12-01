@@ -89,12 +89,16 @@ echo "locales fixed"
 quiet_update && quiet_upgrade
 echo "system upgraded"
 
+timedatectl set-timezone 'Europe/Rome'
+echo "system timezone set to 'Europe/Rome'"
+
 # base packages
 quiet_install linux-image-extra-"$(uname -r)" linux-image-extra-virtual
 echo "new kernels installed"
 
 quiet_install htop tree lynx colordiff tmux zsh git-core molly-guard \
-        apt-transport-https ca-certificates software-properties-common
+              realpath ntp ntp-doc ntpdate \
+              apt-transport-https ca-certificates software-properties-common
 echo "basic packages installed"
 
 add-apt-repository -y ppa:neovim-ppa/unstable
