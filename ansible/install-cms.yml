@@ -40,3 +40,7 @@
       script: ../provision/setup_cms/provision_cms.sh
     - name: provision CMSDB
       script: ../provision/setup_cms/provision_cmsdb.sh
+    - name: copy upstart init script
+      copy: src=../provision/upstart/cms.conf
+            dest=/etc/iniit/cms.conf
+            owner={{ CMS.USER }} group={{ CMS.USERGROUP }} mode=0644
