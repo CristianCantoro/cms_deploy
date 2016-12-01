@@ -43,24 +43,23 @@ function install_oh_my_zsh {
       su -c "sh '$change_user_home/install_ohmyzsh.sh'" "$change_user"
     fi
 
-    # change zsh theme
-    sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="bira"/' \
-      "$change_user_home/.zshrc"
-
-    # make sure that .zshrc is owned by user
-    chown "$change_user:$change_user" "$change_user_home/.zshrc"
-
     echo "oh-my-zsh installed for user $change_user"
   else
     echo "oh-my-zsh alredy installed for user $change_user, skipping"
   fi
 
+  # change zsh theme
+  cp "$change_user_home/.oh-my-zsh/templates/zshrc.zsh-template" \
+    "$change_user_home/.zshrc"
+  sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="bira"/' \
+    "$change_user_home/.zshrc"
+
+  # make sure that .zshrc is owned by user
+  chown "$change_user:$change_user" "$change_user_home/.zshrc"
+
   # remove install script, goodbye
   rm -f "$change_user_home/install_ohmyzsh.sh"
 
-  set +eu
-  source "$change_user_home/.zshrc"
-  set -eu
 }
 
 # no dialogw or questions
