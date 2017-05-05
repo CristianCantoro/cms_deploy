@@ -97,7 +97,7 @@ quiet_install linux-image-extra-"$(uname -r)" linux-image-extra-virtual
 echo "new kernels installed"
 
 quiet_install htop tree lynx colordiff tmux zsh git-core molly-guard \
-              realpath ntp ntp-doc ntpdate \
+              realpath ntp ntp-doc ntpdate gpgv2\
               apt-transport-https ca-certificates software-properties-common
 echo "basic packages installed"
 
@@ -109,6 +109,9 @@ quiet_install
 quiet_update && quiet_install neovim
 [[ ! -L /usr/bin/neovim ]] && cd /usr/bin && ln -s nvim neovim
 echo "neovim installed"
+
+# quiet apt-get autoremove
+quiet_autoremove
 
 # zsh for root and CMS_USER
 install_oh_my_zsh "$USER" "$HOME"
