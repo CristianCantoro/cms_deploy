@@ -4,6 +4,8 @@ IFS=$'\n\t'
 
 source '/tmp/provision/setup_cms/envvars.sh'
 
+CMS_LOGDIR="/var/log/cms"
+
 ##############################################################################
 checksum() {
 
@@ -125,5 +127,13 @@ rm -rf '/var/local/cache/cms'
   ln -s "$CMS_DATADIR/cache/cms" '/var/local/cache/cms'
 echo "linked cache dir from '/var/local/cache/cms' to" \
      "'$CMS_DATADIR/cache/cms'"
+
+# create log dir in
+mkdir -p "$CMS_LOGDIR"
+chown "$CMS_USER:$CMS_USERGROUP" "$CMS_LOGDIR"
+
+# copy pandoc dir
+rsync -Cavz "$PROVISION_DIR/pandoc" "$CMS_DATADIR"
+cp -a "$PROVISION_DIR/pandoc/template.tex" "$CMS_DATADIR"
 
 exit 0
