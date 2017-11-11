@@ -60,7 +60,7 @@ set textwidth=0         " return when column > textwidth. (really format text)
 set scrolloff=3         " min # of lines to keep above and below the cursor
 set linebreak           " (only visual) \n @ [^a-z0-9]
 
-set spell               " spell checking (mv ']s' '[s', add 'zg', fix 'z=')
+" set spell             " spell checking (mv ']s' '[s', add 'zg', fix 'z=')
 set wildmenu            " visual autocomplete for command menu
 set lazyredraw          " redraw only when we need to.
 
