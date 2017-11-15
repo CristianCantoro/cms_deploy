@@ -3,7 +3,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # import variables
-source '/tmp/provision/setup/envvars.sh'
+source '/tmp/provision/setup_cms/envvars.sh'
 
 THE_USER_HOME="$CMS_USER_HOME"
 
