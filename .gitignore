@@ -4,3 +4,7 @@
 # testing
 asd16/
 
+# cleaning history
+# see:
+# https://rtyley.github.io/bfg-repo-cleaner/
+..bfg-report/
