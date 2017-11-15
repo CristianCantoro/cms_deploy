@@ -65,6 +65,9 @@ quiet_install nginx-full php5-cli php5-fpm phppgadmin \
 quiet_install pandoc texlive-full
 echo "CMS optional dependencies installed"
 
+quiet_purge 'apache2'
+echo "purging apache2 installation"
+
 # auto-clean
 apt-get -qq -y autoremove &>/dev/null
 echo "clean system (apt-get autoremove)"
