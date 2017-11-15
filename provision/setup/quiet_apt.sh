@@ -18,6 +18,10 @@ function quiet_remove {
     apt-get -qq -y "$quiet_dpkg" remove "$@" &>/dev/null
 }
 
+function quiet_purge {
+    apt-get -qq -y "$quiet_dpkg" purge "$@" &>/dev/null
+}
+
 function quiet_autoremove {
     apt-get -qq -y autoremove
 }
