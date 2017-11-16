@@ -21,7 +21,6 @@ cms_user = cms_config['CMS']['USER']
 cms_usergroup = cms_config['CMS']['USERGROUP']
 
 Vagrant.configure("2") do |config|
-  config.vm.define "default"
   config.vm.define "cms_provision"
   config.vm.define "cms_ansible"
 
