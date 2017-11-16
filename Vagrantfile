@@ -4,6 +4,14 @@
 
 require 'yaml'
 
+# Read envitionment variable CMS_INSTALL_TEXLIVEFULL to skip installation
+# of texlive-full package.
+# See:
+# https://stackoverflow.com/questions/14124234/
+# Custom options don't seem to work with all versions of Vagrant and Ruby.
+cms_install_texlivefull=!!ENV['CMS_INSTALL_TEXLIVEFULL']
+
+
 current_dir = File.dirname(File.expand_path(__FILE__))
 cms_config_file = "cms.yml"
 cms_config = YAML.load_file(File.join("#{current_dir}",
@@ -61,7 +69,8 @@ Vagrant.configure("2") do |config|
 
     ## CMS provisioning script
     cms_provision.vm.provision :shell, \
-      path: "provision/setup_cms/provision_cms.sh"
+      path: "provision/setup_cms/provision_cms.sh", \
+      env: { 'CMS_INSTALL_TEXLIVEFULL' => cms_install_texlivefull }
     cms_provision.vm.provision :shell, \
       path: "provision/setup_cms/provision_cmsdb.sh"
 

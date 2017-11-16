@@ -8,13 +8,26 @@ You can use [vagrant](https://www.vagrantup.com/) to have a local deployment - o
 
 The easiest way to have a local instance of CMS up-and-running is using [VirtualBox](https://www.virtualbox.org/) and [vagrant](https://www.vagrantup.com/).
 
+
 To launch a local install of CMS do the following:
 ```bash
 user@host:~$ git clone git@github.com:CristianCantoro/cms_deploy.git
 user@host:~$ cd cms_deploy
 user@host:~/cms_deploy$ vagrant up cms_provision
 ```
-(this could take several minutes)
+This will take several minutes.
+
+### Options
+
+These are the options you have issuing the command above:
+
+```bash
+[CMS_INSTALL_TEXLIVEFULL=true] vagrant up [(cms_provision|cms_ansible)]
+```
+
+If you specify the environment variable `CMS_INSTALL_TEXLIVEFULL`, during the installation the additional package `texlive-full` will be installed. This package alone requires dowloading ~3GB and will probably take several minutes. 
+
+## Running CMS in your local virtual machine
 
 You can login to the virtual machine using `vagrant ssh cms_provision`, you will be logged in as the user `vagrant` which has `sudo` privileges with no password.
 ```bash

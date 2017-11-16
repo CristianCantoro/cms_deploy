@@ -62,8 +62,16 @@ echo "CMS dependencies installed"
 
 quiet_install nginx-full php5-cli php5-fpm phppgadmin \
       python-yaml python-sphinx texlive-latex-base python-cups a2ps
-quiet_install pandoc texlive-full
-echo "CMS optional dependencies installed"
+      pandoc
+echo "Additional packages installed"
+
+if $CMS_INSTALL_TEXLIVEFULL; then
+  echo "Installing package texlive-full, this could take a long time..."
+  quiet_install texlive-full
+  echo "texlive-full package installed"
+else
+  echo "Skipping installation of texlive-full"
+fi
 
 quiet_purge 'apache2'
 echo "purging apache2 installation"
