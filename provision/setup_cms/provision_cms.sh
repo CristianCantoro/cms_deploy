@@ -61,7 +61,7 @@ quiet_install build-essential fpc postgresql postgresql-client \
 echo "CMS dependencies installed"
 
 quiet_install nginx-full php5-cli php5-fpm phppgadmin \
-      python-yaml python-sphinx texlive-latex-base python-cups a2ps
+      python-yaml python-sphinx texlive-latex-base python-cups a2ps \
       pandoc
 echo "Additional packages installed"
 
