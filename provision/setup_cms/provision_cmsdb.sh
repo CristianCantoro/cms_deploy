@@ -31,11 +31,16 @@ mkdir -p "$CMS_DATADIR/postgresql"
 rsync -Caz '/var/lib/postgresql/' "$CMS_DATADIR/postgresql"
 echo "created postgres data dir '$CMS_DATADIR/postgresql'"
 
+postgresql_data_maindir="$(cd "$CMS_DATADIR/postgresql" && \
+  find . -maxdepth 2 -type d -name 'main')"
+postgresql_version="$(basename "$(dirname "$postgresql_data_maindir")")"
+postgresql_data_maindir="$CMS_DATADIR/postgresql/${postgresql_version}/main"
+
 chown -R 'postgres:postgres' "$CMS_DATADIR/postgresql"
-chmod -R 0700 "$CMS_DATADIR/postgresql/9.3/main"
+chmod -R 0700 "${postgresql_data_maindir}"
 
 cp "$PROVISION_DIR/postgresql/postgresql.conf" \
-  '/etc/postgresql/9.3/main/postgresql.conf'
+  "/etc/postgresql/${postgresql_version}/main/postgresql.conf"
 rm -rf '/var/lib/postgresql'
 [[ ! -L '/var/lib/postgresql' ]] && \
   ln -s "$CMS_DATADIR/postgresql" '/var/lib/postgresql'
