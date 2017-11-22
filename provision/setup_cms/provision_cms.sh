@@ -52,17 +52,27 @@ checksum() {
 
 quiet_upgrade
 
-quiet_install build-essential fpc postgresql postgresql-client \
-     gettext python2.7 python-setuptools python-tornado python-psycopg2 \
-     python-sqlalchemy python-psutil python-netifaces python-crypto \
-     python-tz python-six iso-codes shared-mime-info stl-manual \
-     python-beautifulsoup python-mechanize python-coverage python-mock \
-     cgroup-lite python-requests python-werkzeug python-gevent patool
-echo "CMS dependencies installed"
+# Install CMS dependencies
+# (see: https://cms.readthedocs.io/en/v1.3/Installation.html)
 
-quiet_install nginx-full php5-cli php5-fpm phppgadmin \
-      python-yaml python-sphinx texlive-latex-base python-cups a2ps \
-      pandoc
+# Feel free to change OpenJDK packages with your preferred JDK.
+quiet_install build-essential openjdk-8-jre openjdk-8-jdk fpc \
+    postgresql postgresql-client gettext p/cython2.7 \
+    iso-codes shared-mime-info stl-manual cgroup-lite
+echo "core dependencies installed"
+
+# Only if you are going to use pip/virtualenv to install python dependencies
+quiet_install python-dev libpq-dev libcups2-dev libyaml-dev \
+    libffi-dev python-pip
+echo "libraries installed"
+
+# separate the installtion of nginx from the rest
+quiet_install nginx-full
+echo "nginx installed"
+
+# Optional
+quiet_install php7.0-cli php7.0-fpm phppgadmin texlive-latex-base a2ps \
+    gcj-jdk haskell-platform
 echo "Additional packages installed"
 
 if $CMS_INSTALL_TEXLIVEFULL; then
@@ -72,9 +82,6 @@ if $CMS_INSTALL_TEXLIVEFULL; then
 else
   echo "Skipping installation of texlive-full"
 fi
-
-quiet_purge 'apache2'
-echo "purging apache2 installation"
 
 # auto-clean
 apt-get -qq -y autoremove &>/dev/null
@@ -99,7 +106,14 @@ rsync -r "$PROVISION_DIR/cms/override/" "$CMS_BASEDIR"
 
 # install cms
 cd "$CMS_BASEDIR" && ./setup.py build
+echo "CMS built"
+
 cd "$CMS_BASEDIR" && ./setup.py install
+echo "CMS installed"
+
+# add group cmsuser
+groupadd "$CMS_USERGROUP"
+echo "create CMS user group '$CMS_USERGROUP'"
 
 # add user to cmsuser group
 usermod -a -G "$CMS_USERGROUP" "$CMS_USER"
@@ -128,7 +142,11 @@ echo "copied scripts dir in '$CMS_USER_HOME'"
 
 # /var/local/cache/cms -> /data/cache/cms
 mkdir -p "$CMS_DATADIR/cache/cms"
-rsync -Caz '/var/local/cache/cms/' "$CMS_DATADIR/cache/cms"
+if [ -d '/var/local/cache/cms/' ]; then
+  rsync -Caz '/var/local/cache/cms/' "$CMS_DATADIR/cache/cms"
+else
+  mkdir -p '/var/local/cache/cms/'
+fi
 chown -R "$CMS_USER:$CMS_USERGROUP" "$CMS_DATADIR/cache"
 chmod -R g+rwx "$CMS_DATADIR/cache/cms"
 echo "created cache dir for CMS in datadir"

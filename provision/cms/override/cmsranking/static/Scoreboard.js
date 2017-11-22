@@ -15,6 +15,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+var escapeHTML = (function() {
+    var escapeMap = {
+        '&' : '&amp;',
+        '<' : '&lt;',
+        '>' : '&gt;',
+        '"' : '&quot;',
+        "'" : '&#x27;',
+        '/' : '&#x2F;',
+        '`' : '&#x60;'
+    };
+    var escapeHTML = function(str) {
+        return String(str).replace(/[&<>"'\/`]/g, function(ch) {
+            return escapeMap[ch];
+        });
+    };
+    return escapeHTML;
+})();
+
 var Scoreboard = new function () {
     var self = this;
 
@@ -163,9 +181,8 @@ var Scoreboard = new function () {
             result += " \
 <col class=\"score contest\" data-contest=\"" + c_id + "\" data-sort_key=\"c_" + c_id + "\"/> <col/><col/><col/>";
         }
-
 // Global score
-//        result += " \
+//         result += " \
 // <col class=\"score global\" data-sort_key=\"global\"/> <col/><col/><col/><col/>";
 
         return result;
@@ -174,19 +191,19 @@ var Scoreboard = new function () {
 
     self.make_head = function () {
         // See the comment in .make_cols() for the reason we use colspans.
-// Table header
-//        var result = " \
+//         var result = " \
 // <tr> \
-//    <th class=\"sel\"></th> \
-//    <th class=\"rank\">Rank</th> \
-//    <th colspan=\"10\" class=\"f_name\">Username</th> \
-//    <th class=\"team\">Team</th>";
+//     <th class=\"sel\"></th> \
+//     <th class=\"rank\">Rank</th> \
+//     <th colspan=\"10\" class=\"f_name\">First Name</th> \
+//     <th colspan=\"10\" class=\"l_name\">Last Name</th> \
+//     <th class=\"team\">Team</th>";
 
         var result = " \
 <tr> \
     <th class=\"sel\"></th> \
     <th class=\"rank\">Rank</th> \
-    <th colspan=\"10\" class=\"f_name\">Username</th>";
+    <th colspan=\"10\" class=\"l_name\">Username</th>";
 
         var contests = DataStore.contest_list;
         for (var i in contests) {
@@ -199,17 +216,17 @@ var Scoreboard = new function () {
                 var t_id = task["key"];
 
                 result += " \
-    <th colspan=\"3\" class=\"score task\" data-task=\"" + t_id + "\" data-sort_key=\"t_" + t_id + "\"><abbr title=\"" + task["name"] + "\">" + task["short_name"] + "</abbr></th>";
+    <th colspan=\"3\" class=\"score task\" data-task=\"" + t_id + "\" data-sort_key=\"t_" + t_id + "\"><abbr title=\"" + escapeHTML(task["name"]) + "\">" + escapeHTML(task["short_name"]) + "</abbr></th>";
             }
 
             result += " \
-    <th colspan=\"4\" class=\"score contest\" data-contest=\"" + c_id + "\" data-sort_key=\"c_" + c_id + "\">" + contest["name"] + "</th>";
+    <th colspan=\"4\" class=\"score contest\" data-contest=\"" + c_id + "\" data-sort_key=\"c_" + c_id + "\"><abbr title=\"" + escapeHTML(contest["name"]) + "\">" + escapeHTML(contest["name"]) + "</abbr></th>";
         }
 
-// Global score column
-//       result += " \
-//    <th colspan=\"5\" class=\"score global\" data-sort_key=\"global\">Global</th> \
+//         result += " \
+//     <th colspan=\"5\" class=\"score global\" data-sort_key=\"global\">Global</th> \
 // </tr>";
+        result += " </tr>";
 
         return result;
     };
@@ -229,18 +246,18 @@ var Scoreboard = new function () {
     self.make_row = function (user) {
         // See the comment in .make_cols() for the reason we use colspans.
         var result = " \
-<tr class=\"user\" data-user=\"" + user["key"] + "\"> \
+<tr class=\"user" + (user["selected"] > 0 ? " selected color" + user["selected"] : "") + "\" data-user=\"" + user["key"] + "\"> \
     <td class=\"sel\"></td> \
     <td class=\"rank\">" + user["rank"] + "</td> \
-    <td colspan=\"10\" class=\"f_name\">" + user["key"] + "</td> ";
+    <td colspan=\"10\" class=\"l_name\">" + escapeHTML(user["l_name"]) + "</td>";
 
-//        if (user['team']) {
-//            result += " \
-//    <td class=\"team\"><img src=\"" + Config.get_flag_url(user["team"]) + "\" title=\"" + DataStore.teams[user["team"]]["name"] + "\" /></td>";
-//        } else {
-//            result += " \
-//    <td class=\"team\"></td>";
-//        }
+    //     if (user['team']) {
+    //         result += " \
+    // <td class=\"team\"><img src=\"" + Config.get_flag_url(user["team"]) + "\" title=\"" + DataStore.teams[user["team"]]["name"] + "\" /></td>";
+    //     } else {
+    //         result += " \
+    // <td class=\"team\"></td>";
+    //     }
 
         var contests = DataStore.contest_list;
         for (var i in contests) {
@@ -262,12 +279,13 @@ var Scoreboard = new function () {
     <td colspan=\"4\" class=\"score contest " + score_class + "\" data-contest=\"" + c_id + "\" data-sort_key=\"c_" + c_id + "\">" + round_to_str(user["c_" + c_id], contest["score_precision"]) + "</td>";
         }
 
-        var score_class = self.get_score_class(user["global"], DataStore.global_max_score);
-
 // Global score data
-//        result += " \
-//    <td colspan=\"5\" class=\"score global " + score_class + "\" data-sort_key=\"global\">" + round_to_str(user["global"], DataStore.global_score_precision) + "</td> \
+//         var score_class = self.get_score_class(user["global"], DataStore.global_max_score);
+//         result += " \
+//     <td colspan=\"5\" class=\"score global " + score_class + "\" data-sort_key=\"global\">" + round_to_str(user["global"], DataStore.global_score_precision) + "</td> \
 // </tr>";
+
+        result += " </tr>";
 
         return result;
     };
