@@ -51,13 +51,12 @@ checksum() {
 ##############################################################################
 
 quiet_upgrade
+echo "upgrades installed"
 
 # Install CMS dependencies
 # (see: https://cms.readthedocs.io/en/v1.3/Installation.html)
-
-# Feel free to change OpenJDK packages with your preferred JDK.
 quiet_install build-essential openjdk-8-jre openjdk-8-jdk fpc \
-    postgresql postgresql-client gettext p/cython2.7 \
+    postgresql postgresql-client gettext python2.7 \
     iso-codes shared-mime-info stl-manual cgroup-lite
 echo "core dependencies installed"
 
