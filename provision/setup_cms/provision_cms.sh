@@ -72,14 +72,14 @@ echo "nginx installed"
 # Optional
 quiet_install php7.0-cli php7.0-fpm phppgadmin texlive-latex-base a2ps \
     gcj-jdk haskell-platform
-echo "Additional packages installed"
+echo "additional packages installed"
 
 if $CMS_INSTALL_TEXLIVEFULL; then
-  echo "Installing package texlive-full, this could take a long time..."
+  echo "installing package texlive-full, this could take a long time..."
   quiet_install texlive-full
   echo "texlive-full package installed"
 else
-  echo "Skipping installation of texlive-full"
+  echo "skipping installation of texlive-full"
 fi
 
 # auto-clean
