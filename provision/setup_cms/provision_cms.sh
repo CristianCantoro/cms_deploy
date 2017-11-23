@@ -155,9 +155,9 @@ mkdir -p "$CMS_DATADIR/tmp"
 chown "$CMS_USER:$CMS_USERGROUP" "$CMS_DATADIR/tmp"
 echo "created tmp dir for CMS in datadir"
 
-cp -r "$PROVISION_DIR/cms/scripts" "$CMS_USER_HOME/.scripts"
+cp -r "$PROVISION_DIR/utils/scripts" "$CMS_USER_HOME/.scripts"
 chown -R "$CMS_USER:$CMS_USERGROUP" "$CMS_USER_HOME/.scripts"
-cp "$PROVISION_DIR/cms/scripts/contest_id" "$CMS_USER_HOME/contest_id"
+mv "$CMS_USER_HOME/.scripts/contest_id" "$CMS_USER_HOME/contest_id"
 chown "$CMS_USER:$CMS_USERGROUP" "$CMS_USER_HOME/contest_id"
 echo "copied scripts dir in '$CMS_USER_HOME'"
 

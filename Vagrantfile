@@ -75,7 +75,7 @@ Vagrant.configure("2") do |config|
 
     ## add upstart script
     cms_provision.vm.provision :shell, \
-      inline: "cp /tmp/provision/upstart/cms.conf \
+      inline: "cp /tmp/provision/utils/upstart/cms.conf \
                   /etc/init/cms.conf"
     cms_provision.vm.provision :shell, \
       inline: "chown #{cms_user}:#{cms_usergroup} /etc/init/cms.conf"
