@@ -19,13 +19,14 @@ CMS_DB=$(echo "$CMS_DBCONNECTION" | \
 
 echo "---"
 echo "CMS DB vars:" 
-echo "- CMS_DB: $CMS_DB" 
+echo "- CMS_DB: $CMS_DB"
 echo "- CMS_DBUSER: $CMS_DBUSER"
 echo "- CMS_DBHOST: $CMS_DBHOST"
 echo "--------"
 
 # move postgres data dir to CMS datadir
 service postgresql stop
+echo "postgres stopped"
 
 mkdir -p "$CMS_DATADIR/postgresql"
 rsync -Caz '/var/lib/postgresql/' "$CMS_DATADIR/postgresql"
@@ -46,6 +47,7 @@ rm -rf '/var/lib/postgresql'
   ln -s "$CMS_DATADIR/postgresql" '/var/lib/postgresql'
 
 service postgresql start
+echo "postgres started"
 
 # copy .pgpass
 cp "$PROVISION_DIR/postgresql/.pgpass"  "$CMS_USER_HOME"

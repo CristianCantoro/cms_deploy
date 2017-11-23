@@ -65,6 +65,14 @@ quiet_install python-dev libpq-dev libcups2-dev libyaml-dev \
     libffi-dev python-pip
 echo "libraries installed"
 
+quiet_install python-setuptools python-tornado python-psycopg2 \
+     python-sqlalchemy python-psutil python-netifaces python-crypto \
+     python-tz python-six python-beautifulsoup python-mechanize \
+     python-coverage python-mock python-requests python-werkzeug \
+     python-gevent python-bcrypt python-chardet patool \
+     python-yaml python-sphinx python-cups python-pypdf2
+echo "python dependencies installed"
+
 # separate the installtion of nginx from the rest
 quiet_install nginx-full
 echo "nginx installed"
@@ -109,6 +117,11 @@ echo "CMS built"
 
 cd "$CMS_BASEDIR" && ./setup.py install
 echo "CMS installed"
+
+cd "$CMS_BASEDIR" && cp 'config/cms.conf' '/usr/local/etc/'
+cd "$CMS_BASEDIR" && cp 'config/cms.ranking.conf' '/usr/local/etc/'
+cd "$CMS_BASEDIR"
+echo "CMS configuration files installed"
 
 # add group cmsuser
 groupadd "$CMS_USERGROUP"
