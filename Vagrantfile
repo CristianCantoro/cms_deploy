@@ -82,6 +82,10 @@ Vagrant.configure("2") do |config|
     cms_provision.vm.provision :shell, \
       inline: "chmod 644 /etc/init/cms.conf"
 
+    ## add systemd scripts
+    cms_provision.vm.provision :shell, \
+      path: "provision/systemd/setup_systemd.sh"
+
     ## provision nginx
     cms_provision.vm.provision :shell, \
       path: "provision/nginx/provision_nginx.sh"
