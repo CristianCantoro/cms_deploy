@@ -114,7 +114,7 @@ rsync -r "$PROVISION_DIR/cms/override/" "$CMS_BASEDIR"
 # substitute all the instances of "cmsuser" in prerequisites.py with the
 # value of $CMS_USER
 cd "$CMS_BASEDIR" && \
-  sed -i \'s/\"cmsuser\"/\""$CMS_USER"\"/g\' prerequisites.py
+   sed -i "s/\"cmsuser\"/\"$CMS_USER\"/g" prerequisites.py
 
 # run CMS prerequisites file
 cd "$CMS_BASEDIR" && ./prerequisites.py install -y
@@ -131,10 +131,6 @@ cd "$CMS_BASEDIR" && cp 'config/cms.conf' '/usr/local/etc/'
 cd "$CMS_BASEDIR" && cp 'config/cms.ranking.conf' '/usr/local/etc/'
 cd "$CMS_BASEDIR"
 echo "CMS configuration files installed"
-
-# add group cmsuser
-groupadd "$CMS_USERGROUP"
-echo "create CMS user group '$CMS_USERGROUP'"
 
 # add user to cmsuser group
 usermod -a -G "$CMS_USERGROUP" "$CMS_USER"
