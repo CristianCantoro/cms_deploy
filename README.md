@@ -2,7 +2,9 @@
 
 This repo is a collection of scripts (and an ansible playbook) to deploy an installation of [CMS (Contest Management System)](https://github.com/cms-dev/cms).
 
-You can use [vagrant](https://www.vagrantup.com/) to have a local deployment - on a virtual machine - of CMS `v1.2.0` (release in Febraury 2015). Work is in progress to also support the latest release of CMS `v1.3.rc0`.
+You can use [vagrant](https://www.vagrantup.com/) to have a local deployment - on a virtual machine - of:
+* CMS `v1.2.0` - released in Febraury 2015 - see the corresponding tag, or
+* CMS `v1.3.rc0` - latest release, released in March 2017.
 
 ## Installation instructions
 
@@ -78,4 +80,4 @@ vagrant@cms-provision:~$ ip -4 addr show eth1
     inet 172.28.128.15/24 brd 172.28.128.255 scope global eth1
 ```
 
-The local CMS instance is thus available at: `http://172.28.128.15/`.
+The local CMS instance is available - in this example - at: `http://172.28.128.15/`.
