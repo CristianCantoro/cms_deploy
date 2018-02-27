@@ -25,10 +25,13 @@ Vagrant.configure("2") do |config|
   config.vm.define "cms_ansible"
 
   config.vm.box = "ubuntu/xenial64"
+  # increase disk size
+  config.disksize.size = '20GB'
 
   config.vm.provider "virtualbox" do |vb| 
     # 1GB RAM
     vb.memory = "2048"
+
   end
   config.vm.hostname = 'cms'
   config.vm.network "private_network", type: "dhcp"

@@ -10,6 +10,18 @@ You can use [vagrant](https://www.vagrantup.com/) to have a local deployment - o
 
 The easiest way to have a local instance of CMS up-and-running is using [VirtualBox](https://www.virtualbox.org/) and [vagrant](https://www.vagrantup.com/).
 
+### Required plugins
+
+You will need two plugins:
+
+* [`vagrant-reload`](https://github.com/aidanns/vagrant-reload)
+* [`vagrant-disksize`](https://github.com/sprotheroe/vagrant-disksize)
+
+You can install them with:
+```bash
+$ vagrant plugin install vagrant-reload
+$ vagrant plugin install vagrant-disksize
+```
 
 To launch a local install of CMS do the following:
 ```bash
