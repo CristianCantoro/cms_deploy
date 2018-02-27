@@ -110,9 +110,11 @@ cd "$CMS_USER_HOME/" && tar xzf "$CMS_INSTALL_FILE"
 
 # override CMS files and configurations specified in 'provision/cms/override'
 rsync -r "$PROVISION_DIR/cms/override/" "$CMS_BASEDIR"
+echo "copy override files"
 
 # substitute all the instances of "cmsuser" in prerequisites.py with the
 # value of $CMS_USER
+echo "launch prerequisites.py"
 cd "$CMS_BASEDIR" && \
    sed -i "s/\"cmsuser\"/\"$CMS_USER\"/g" prerequisites.py
 
