@@ -8,6 +8,9 @@
 asd16/
 asd17/
 
+# ignore tmp directory
+tmp/
+
 # cleaning history
 # see:
 # https://rtyley.github.io/bfg-repo-cleaner/
