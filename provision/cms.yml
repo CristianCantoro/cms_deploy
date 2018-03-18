@@ -6,6 +6,9 @@ CMS:
   HASHSUM_FILE: cms_v1.3.rc0.tar.gz.sha256sum
   USER: cms
   USERGROUP: cmsuser
+  ADMIN:
+    USER: admin
+    PASSWORD: admin
 
   ## CMS dirs
   # Neither Vagrantfiles, nor Ansible playbooks are able to resolve variables

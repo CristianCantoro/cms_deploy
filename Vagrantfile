@@ -4,6 +4,10 @@
 
 require 'yaml'
 
+END {
+  puts "==> All done!"
+}
+
 # Read envitionment variable CMS_INSTALL_TEXLIVEFULL to skip installation
 # of texlive-full package.
 # See:
@@ -75,6 +79,8 @@ Vagrant.configure("2") do |config|
       env: { 'CMS_INSTALL_TEXLIVEFULL' => cms_install_texlivefull }
     cms_provision.vm.provision :shell, \
       path: "provision/setup_cms/provision_cmsdb.sh"
+    cms_provision.vm.provision :shell, \
+      path: "provision/setup_cms/provision_cmsadmin.sh"
 
     ## add upstart script
     cms_provision.vm.provision :shell, \
