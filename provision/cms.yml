@@ -1,9 +1,9 @@
 ---
 CMS:
   ## CMS variables
-  VERSION: 1.3.0
-  INSTALL_FILE: cms_v1.3.0.tar.gz
-  HASHSUM_FILE: cms_v1.3.0.tar.gz.sha256sum
+  VERSION: 1.3.1
+  INSTALL_FILE: cms_v1.3.1.tar.gz
+  HASHSUM_FILE: cms_v1.3.1.tar.gz.sha256sum
   USER: cms
   USERGROUP: cmsuser
   ADMIN:
