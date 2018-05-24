@@ -66,8 +66,8 @@ function install_oh_my_zsh {
 export DEBIAN_FRONTEND=noninteractive
 
 # fix the locales
-export LANG=en_US.UTF-8
-export LANGUAGE=en_US:
+export LANG="en_US.UTF-8"
+export LANGUAGE="en_US"
 export LC_CTYPE="en_US.UTF-8"
 export LC_NUMERIC="en_US.UTF-8"
 export LC_TIME="en_US.UTF-8"
@@ -80,7 +80,7 @@ export LC_ADDRESS="en_US.UTF-8"
 export LC_TELEPHONE="en_US.UTF-8"
 export LC_MEASUREMENT="en_US.UTF-8"
 export LC_IDENTIFICATION="en_US.UTF-8"
-export LC_ALL=en_US.UTF-8
+export LC_ALL="en_US.UTF-8"
 locale-gen it_IT.UTF-8 en_US.UTF-8 &>/dev/null
 dpkg-reconfigure locales &>/dev/null
 echo "locales fixed"
