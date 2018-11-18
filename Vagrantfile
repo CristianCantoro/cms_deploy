@@ -74,6 +74,8 @@ Vagrant.configure("2") do |config|
       inline: "su -c '/tmp/provision/setup/setup_user.sh' #{cms_user}"
 
     ## CMS provisioning script
+    cms_provision.vm.provision :shell,
+      inline: "[ -d '/vagrant/work' ] && rsync -a '/vagrant/work' '/tmp'"
     cms_provision.vm.provision :shell, \
       path: "provision/setup_cms/provision_cms.sh", \
       env: { 'CMS_INSTALL_TEXLIVEFULL' => cms_install_texlivefull }

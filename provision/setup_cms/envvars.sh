@@ -52,6 +52,7 @@ function parse_yaml() {
 
 envars_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROVISION_DIR="$(dirname "${envars_path}")"
+WORK_DIR="$(realpath "$(dirname "${envars_path}")/../work")"
 
 eval "$(parse_yaml "${envars_path}/../cms.yml" '')"
 
@@ -75,6 +76,7 @@ echo "- CMS_ADMIN_PASSWORD: $CMS_ADMIN_PASSWORD"
 echo "---"
 echo "Provision vars"
 echo "- PROVISION_DIR: $PROVISION_DIR"
+echo "- WORK_DIR: $WORK_DIR"
 echo "--------"
 
 # no dialog or questions

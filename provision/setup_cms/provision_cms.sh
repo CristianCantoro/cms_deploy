@@ -94,6 +94,10 @@ fi
 apt-get -qq -y autoremove &>/dev/null
 echo "clean system (apt-get autoremove)"
 
+# create basedir
+mkdir -p "$CMS_BASEDIR"
+echo "created CMS base dir"
+
 # clean up builds (just in case)
 cd "$CMS_BASEDIR" && rm -rf 'cms.egg-info/' && rm -rf 'build/'
 echo "cleanup build"
@@ -107,6 +111,7 @@ cd "$CMS_USER_HOME/" && checksum "$CMS_HASHSUM_FILE"
 
 # extract files
 cd "$CMS_USER_HOME/" && tar xzf "$CMS_INSTALL_FILE"
+cd "$CMS_USER_HOME/" && chown -R "$CMS_USER:$CMS_USER" "$CMS_BASEDIR"
 
 # override CMS files and configurations specified in 'provision/cms/override'
 rsync -r "$PROVISION_DIR/cms/override/" "$CMS_BASEDIR"
@@ -119,6 +124,13 @@ cd "$CMS_BASEDIR" && \
    sed -i "s/\"cmsuser\"/\"$CMS_USER\"/g" prerequisites.py
 
 # run CMS prerequisites file
+echo "build everything (as $CMS_USER)"
+cd "$CMS_BASEDIR" && su -c "./prerequisites.py build_l10n" "$CMS_USER"
+cd "$CMS_BASEDIR" && su -c "./prerequisites.py build_isolate" "$CMS_USER"
+cd "$CMS_BASEDIR" && su -c "./prerequisites.py build" "$CMS_USER"
+echo "built done"
+
+echo "install everything"
 cd "$CMS_BASEDIR" && ./prerequisites.py install -y
 echo "CMS prerequisites script run"
 
@@ -138,10 +150,9 @@ echo "CMS configuration files installed"
 usermod -a -G "$CMS_USERGROUP" "$CMS_USER"
 echo "add user '$CMS_USER' to CMS user group '$CMS_USERGROUP'"
 
-# create basedir
-mkdir -p "$CMS_BASEDIR"
+# change owner of basedir
 chown "$CMS_USER:$CMS_USERGROUP" "$CMS_BASEDIR"
-echo "created CMS base dir"
+echo "changed owner of CMS base dir $CMS_BASEDIR to $CMS_USER"
 
 # add data dir
 mkdir -p "$CMS_DATADIR"
@@ -179,9 +190,18 @@ echo "linked cache dir from '/var/local/cache/cms' to" \
 # create log dir in
 mkdir -p "$CMS_LOGDIR"
 chown "$CMS_USER:$CMS_USERGROUP" "$CMS_LOGDIR"
+echo "created '$CMS_LOGDIR'"
 
 # copy pandoc dir
 rsync -Cavz "$PROVISION_DIR/pandoc" "$CMS_DATADIR"
 cp -a "$PROVISION_DIR/pandoc/template.tex" "$CMS_DATADIR"
+chown "$CMS_USER:$CMS_USERGROUP" "$PROVISION_DIR/pandoc"
+echo "copied pandoc files"
+
+if [ -d "$WORK_DIR" ]; then
+  rsync -Cavz "$WORK_DIR" "$CMS_DATADIR"
+  chown -R "$CMS_USER:$CMS_USERGROUP" "$CMS_DATADIR"
+  echo "copied word dir in '$CMS_DATADIR'"
+fi
 
 exit 0

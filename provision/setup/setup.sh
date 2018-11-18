@@ -16,7 +16,7 @@ function install_oh_my_zsh {
   echo "copying zshrc template to $change_user_home/.zshrc"
 
   # change default shell to zsh
-  chsh -s "$(which zsh)" "$change_user"
+  chsh -s "$(command -v zsh)" "$change_user"
   echo "default shell changed to zsh for user '$change_user'"
 
   # download install script
@@ -113,5 +113,17 @@ quiet_autoremove
 # zsh for root and CMS_USER
 install_oh_my_zsh "$USER" "$HOME"
 install_oh_my_zsh "$CMS_USER" "$CMS_USER_HOME"
+echo "oh_my_zsh installed"
+
+# zsh for root and CMS_USER
+mkdir -p "$HOME/.ssh/"
+cat "$PROVISION_DIR/setup/id_rsa.pub" > "$HOME/.ssh/authorized_keys"
+chmod 600 "$HOME/.ssh/authorized_keys"
+
+mkdir -p "$CMS_USER_HOME/.ssh/"
+cat "$PROVISION_DIR/setup/id_rsa.pub" > "$CMS_USER_HOME/.ssh/authorized_keys"
+chmod 600 "$CMS_USER_HOME/.ssh/authorized_keys"
+chown -R "$CMS_USER:$CMS_USER" "$CMS_USER_HOME/.ssh/"
+echo "copy ssh key to $CMS_USER_HOME/.ssh/"
 
 exit 0

@@ -5,8 +5,10 @@
 *.log
 
 # testing
+work/
 asd16/
 asd17/
+asd18/
 
 # ignore tmp directory
 tmp/
