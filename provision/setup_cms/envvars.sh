@@ -17,6 +17,8 @@ function parse_yaml() {
    w='[a-zA-Z0-9_]*'
    local fs
    fs=$(echo @|tr @ '\034')
+   # disable literal backslashes warning
+   # shellcheck disable=SC1117
    sed -ne "s|^\($s\)\($w\)$s:$s\"\(.*\)\"$s\$|\1$fs\2$fs\3|p" \
         -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  "$1" |
    awk -F"$fs" '{
@@ -84,4 +86,5 @@ export DEBIAN_FRONTEND=noninteractive
 echo "set DEBIAN_FRONTEND to 'noninteractive'"
 
 # source functions for quiet apt update/uograde/install
+# shellcheck disable=SC1090
 source "$PROVISION_DIR/setup/quiet_apt.sh"

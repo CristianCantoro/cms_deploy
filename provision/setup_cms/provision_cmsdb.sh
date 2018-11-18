@@ -2,6 +2,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# shellcheck disable=SC1091
 source '/tmp/provision/setup_cms/envvars.sh'
 
 CMS_DBCONNECTION=$(grep '"database": ' "$CMS_BASEDIR/config/cms.conf" | \

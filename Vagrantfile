@@ -23,6 +23,7 @@ cms_config = YAML.load_file(File.join("#{current_dir}",
                                       "#{cms_config_file}"))
 cms_user = cms_config['CMS']['USER']
 cms_usergroup = cms_config['CMS']['USERGROUP']
+cms_version = cms_config['CMS']['VERSION']
 
 Vagrant.configure("2") do |config|
   config.vm.define "cms_provision"
@@ -58,6 +59,9 @@ Vagrant.configure("2") do |config|
 
     cms_provision.vm.provision :shell, \
       inline: "rsync -a '/vagrant/provision' '/tmp'"
+
+    cms_provision.vm.provision :shell, \
+      path: "provision/setup_cms/check_cms_release.py #{cms_version}"
 
     cms_provision.vm.provision :shell, \
       inline: "id -u cms &>/dev/null || \
