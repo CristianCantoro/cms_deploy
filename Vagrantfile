@@ -61,7 +61,8 @@ Vagrant.configure("2") do |config|
       inline: "rsync -a '/vagrant/provision' '/tmp'"
 
     cms_provision.vm.provision :shell, \
-      path: "provision/setup_cms/check_cms_release.py #{cms_version}"
+      path: "provision/setup_cms/check_cms_release.py", \
+      args: "#{cms_version}"
 
     cms_provision.vm.provision :shell, \
       inline: "id -u cms &>/dev/null || \
