@@ -53,6 +53,7 @@ echo "postgres started"
 # copy .pgpass
 cp "$PROVISION_DIR/postgresql/.pgpass"  "$CMS_USER_HOME"
 chmod 600 "$PROVISION_DIR/postgresql/.pgpass"
+# shellcheck disable=SC2153
 chown "$CMS_USER:$CMS_USER" "$PROVISION_DIR/postgresql/.pgpass"
 echo ".pgpass file copied"
 
