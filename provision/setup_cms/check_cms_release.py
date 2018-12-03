@@ -22,12 +22,13 @@ if __name__ == '__main__':
         exit(ENOTENOUGHARGS)
 
     target = sys.argv[1]
+    print("cms_version: {}".format(target))
 
     contents = (urllib.request
                       .urlopen(CMSGH_API_RELEASES)
                       .read()
                 )
-    res = json.loads(contents)
+    res = json.loads(contents.decode('utf-8'))
 
     releases = [release['tag_name'] for release in res]
     
