@@ -2,6 +2,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# shellcheck disable=SC1091
 source '/tmp/provision/setup_cms/envvars.sh'
 
 CMS_LOGDIR="/var/log/cms"
@@ -142,7 +143,9 @@ cd "$CMS_BASEDIR" && ./setup.py install
 echo "CMS installed"
 
 cd "$CMS_BASEDIR" && cp 'config/cms.conf' '/usr/local/etc/'
+chown "$CMS_USER:$CMS_USERGROUP" '/usr/local/etc/cms.conf'
 cd "$CMS_BASEDIR" && cp 'config/cms.ranking.conf' '/usr/local/etc/'
+chown "$CMS_USER:$CMS_USERGROUP" '/usr/local/etc/cms.ranking.conf'
 cd "$CMS_BASEDIR"
 echo "CMS configuration files installed"
 
