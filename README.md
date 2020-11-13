@@ -3,10 +3,11 @@
 This repo is a collection of scripts (and an ansible playbook) to deploy an installation of [CMS (Contest Management System)](https://github.com/cms-dev/cms).
 
 You can use [vagrant](https://www.vagrantup.com/) to have a local deployment - on a virtual machine - of:
-* CMS `v1.2.0` - released in Febraury 2015 - , or
-* CMS `v1.3.rc0` - released in March 2017, or
-* CMS `v1.3.0` - released in March 2018, or
-* CMS `v1.3.1` - latest stable release, released in April 2018.
+* CMS `v1.4.rc1` - latest stable release, released in November 2018.
+* CMS `v1.3.1` - released in April 2018
+* CMS `v1.3.0` - released in March 2018
+* CMS `v1.3.rc0` - released in March 2017
+* CMS `v1.2.0` - released in Febraury 2015
 
 See the corresponding tag for each release.
 
