@@ -54,16 +54,37 @@ checksum() {
 quiet_upgrade
 echo "upgrades installed"
 
+# add repository to install older version of postgres
+# (see: https://www.postgresql.org/download/linux/ubuntu/)
+#
+# Create the file repository configuration
+echo "Add postgresql repository"
+echo "deb http://apt.postgresql.org/pub/repos/apt " \
+     "$(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+
+# Import the repository signing key
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | \
+  apt-key add --no-tty - &>/dev/null
+echo "postgres repository added"
+
+# Run apt-update to update the package lists
+quiet_update
+
+# Install the database and db client
+quiet_install "postgresql-${CMS_DB_VERSION}" \
+              "postgresql-client-${CMS_DB_VERSION}"
+echo "database installed"
+
 # Install CMS dependencies
-# (see: https://cms.readthedocs.io/en/v1.3/Installation.html)
-quiet_install build-essential openjdk-8-jre openjdk-8-jdk fpc \
-    postgresql postgresql-client gettext python2.7 \
-    iso-codes shared-mime-info stl-manual cgroup-lite
+# (see: https://cms.readthedocs.io/en/v1.4/Installation.html)
+quiet_install build-essential openjdk-8-jdk-headless fp-compiler \
+    python3.6 python-future cppreference-doc-en-html cgroup-lite libcap-dev \
+    zip
 echo "core dependencies installed"
 
 # Only if you are going to use pip/virtualenv to install python dependencies
-quiet_install python-dev libpq-dev libcups2-dev libyaml-dev \
-    libffi-dev python-pip
+quiet_install python3.6-dev libpq-dev libcups2-dev libyaml-dev \
+    libffi-dev python3-pip
 echo "libraries installed"
 
 quiet_install python-setuptools python-tornado python-psycopg2 \
@@ -79,8 +100,10 @@ quiet_install nginx-full
 echo "nginx installed"
 
 # Optional
-quiet_install php7.0-cli php7.0-fpm phppgadmin texlive-latex-base a2ps \
-    gcj-jdk haskell-platform
+# note: package gcj-jdk has no installation candidate on Ubuntu 18.04.5
+quiet_install  python2.7 php7.2-cli php7.2-fpm \
+    phppgadmin texlive-latex-base a2ps haskell-platform rustc \
+    mono-mcs
 echo "additional packages installed"
 
 if $CMS_INSTALL_TEXLIVEFULL; then
@@ -120,19 +143,31 @@ echo "copy override files"
 
 # substitute all the instances of "cmsuser" in prerequisites.py with the
 # value of $CMS_USER
-echo "launch prerequisites.py"
+echo "substitute '$CMS_USER' for 'cmsuser' in prerequisites.py"
 cd "$CMS_BASEDIR" && \
    sed -i "s/\"cmsuser\"/\"$CMS_USER\"/g" prerequisites.py
 
+# add the group $CMS_USERGROUP, fail graciously if the group already exists
+echo "add '$CMS_USERGROUP' group"
+addgroup "$CMS_USERGROUP" || true
+
+# add user to CMS user group
+echo "add user '$CMS_USER' to CMS user group '$CMS_USERGROUP'"
+usermod -a -G "$CMS_USERGROUP" "$CMS_USER"
+
+# change group ownership of $CMS_USER_HOME to $CMS_USERGROUP (which may be
+# different from the default)
+echo "change group ownership of $CMS_USER_HOME to $CMS_USERGROUP"
+chown -R "$CMS_USER:$CMS_USERGROUP" "$CMS_USER_HOME"
+
 # run CMS prerequisites file
 echo "build everything (as $CMS_USER)"
-cd "$CMS_BASEDIR" && su -c "./prerequisites.py build_l10n" "$CMS_USER"
 cd "$CMS_BASEDIR" && su -c "./prerequisites.py build_isolate" "$CMS_USER"
 cd "$CMS_BASEDIR" && su -c "./prerequisites.py build" "$CMS_USER"
 echo "built done"
 
 echo "install everything"
-cd "$CMS_BASEDIR" && ./prerequisites.py install -y
+cd "$CMS_BASEDIR" && ./prerequisites.py -y install
 echo "CMS prerequisites script run"
 
 # install cms
@@ -149,17 +184,13 @@ chown "$CMS_USER:$CMS_USERGROUP" '/usr/local/etc/cms.ranking.conf'
 cd "$CMS_BASEDIR"
 echo "CMS configuration files installed"
 
-# add user to cmsuser group
-usermod -a -G "$CMS_USERGROUP" "$CMS_USER"
-echo "add user '$CMS_USER' to CMS user group '$CMS_USERGROUP'"
-
 # change owner of basedir
 chown "$CMS_USER:$CMS_USERGROUP" "$CMS_BASEDIR"
 echo "changed owner of CMS base dir $CMS_BASEDIR to $CMS_USER"
 
 # add data dir
 mkdir -p "$CMS_DATADIR"
-chown "$CMS_USER:$CMS_USERGROUP" "$CMS_DATADIR"
+chown -R "$CMS_USER:$CMS_USERGROUP" "$CMS_DATADIR"
 echo "created CMS data dir"
 
 # add tmp dir in datadir

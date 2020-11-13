@@ -93,12 +93,12 @@ timedatectl set-timezone 'Europe/Rome'
 echo "system timezone set to 'Europe/Rome'"
 
 # base packages
-quiet_install linux-image-extra-"$(uname -r)" linux-image-extra-virtual
+quiet_install linux-virtual
 echo "new kernels installed"
 
 quiet_install htop tree lynx colordiff tmux zsh git-core molly-guard \
-              realpath ntp ntp-doc ntpdate gpgv2\
-              apt-transport-https ca-certificates software-properties-common
+              ntp ntp-doc ntpdate gpgv2 apt-transport-https \
+              ca-certificates software-properties-common
 echo "basic packages installed"
 
 add-apt-repository -y ppa:neovim-ppa/unstable

@@ -5,6 +5,8 @@ IFS=$'\n\t'
 # shellcheck disable=SC1091
 source '/tmp/provision/setup_cms/envvars.sh'
 
+echo "provision CMS database"
+
 CMS_DBCONNECTION=$(grep '"database": ' "$CMS_BASEDIR/config/cms.conf" | \
   sed 's/\s*"database":\s*//g' | tr -d '",')
 
@@ -20,6 +22,7 @@ CMS_DB=$(echo "$CMS_DBCONNECTION" | \
 
 echo "---"
 echo "CMS DB vars:" 
+echo "- CMS_DB_VERSION: $CMS_DB_VERSION"
 echo "- CMS_DB: $CMS_DB"
 echo "- CMS_DBUSER: $CMS_DBUSER"
 echo "- CMS_DBHOST: $CMS_DBHOST"

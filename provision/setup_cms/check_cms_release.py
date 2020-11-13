@@ -31,10 +31,10 @@ if __name__ == '__main__':
     res = json.loads(contents.decode('utf-8'))
 
     releases = [release['tag_name'] for release in res]
-    
-    if target in releases:
-        exit(0)
-    else:
+
+    if target not in releases:
         print("Error. Target release '{}' not found".format(target),
               file=sys.stderr)
         exit(ENORELEASE)
+
+    exit(0)

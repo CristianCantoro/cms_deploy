@@ -1,15 +1,16 @@
 ---
 CMS:
   ## CMS variables
-  VERSION: v1.3.2
-  INSTALL_FILE: cms_v1.3.2.tar.gz
-  HASHSUM_FILE: cms_v1.3.2.tar.gz.sha256sum
+  VERSION: v1.4.rc1
+  INSTALL_FILE: cms_v1.4.rc1.tar.gz
+  HASHSUM_FILE: cms_v1.4.rc1.tar.gz.sha256sum
   USER: cms
   USERGROUP: cmsuser
   ADMIN:
     USER: admin
     PASSWORD: admin
-
+  DB:
+    VERSION: 9.5
   ## CMS dirs
   # Neither Vagrantfiles, nor Ansible playbooks are able to resolve variables
   # within YAML files, so something like the following:

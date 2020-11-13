@@ -79,6 +79,9 @@ echo "---"
 echo "Provision vars"
 echo "- PROVISION_DIR: $PROVISION_DIR"
 echo "- WORK_DIR: $WORK_DIR"
+echo "---"
+echo "Database vars"
+echo "CMS_DB_VERSION: $CMS_DB_VERSION"
 echo "--------"
 
 # no dialog or questions

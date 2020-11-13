@@ -5,7 +5,9 @@
 require 'yaml'
 
 END {
-  puts "==> All done!"
+  if $!.status == 0
+    puts "==> All done!"
+  end
 }
 
 # Read envitionment variable CMS_INSTALL_TEXLIVEFULL to skip installation
@@ -26,10 +28,15 @@ cms_usergroup = cms_config['CMS']['USERGROUP']
 cms_version = cms_config['CMS']['VERSION']
 
 Vagrant.configure("2") do |config|
+
+  # require plugin vagrant-reload
+  # require plugin vagrant-disksize
+  config.vagrant.plugins = ["vagrant-reload", "vagrant-disksize"]
+
   config.vm.define "cms_provision"
   config.vm.define "cms_ansible"
 
-  config.vm.box = "ubuntu/xenial64"
+  config.vm.box = "ubuntu/bionic64"
   # increase disk size
   config.disksize.size = '20GB'
 
@@ -80,7 +87,7 @@ Vagrant.configure("2") do |config|
 
     ## CMS provisioning script
     cms_provision.vm.provision :shell,
-      inline: "[ -d '/vagrant/work' ] && rsync -a '/vagrant/work' '/tmp'"
+      inline: "[ -d '/vagrant/work' ] && rsync -a '/vagrant/work' '/tmp' || true"
     cms_provision.vm.provision :shell, \
       path: "provision/setup_cms/provision_cms.sh", \
       env: { 'CMS_INSTALL_TEXLIVEFULL' => cms_install_texlivefull }
