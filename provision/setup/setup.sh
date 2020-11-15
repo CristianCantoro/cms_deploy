@@ -81,8 +81,9 @@ export LC_TELEPHONE="en_US.UTF-8"
 export LC_MEASUREMENT="en_US.UTF-8"
 export LC_IDENTIFICATION="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
-locale-gen it_IT.UTF-8 en_US.UTF-8 &>/dev/null
+locale-gen en_US.UTF-8 &>/dev/null
 dpkg-reconfigure locales &>/dev/null
+cp "$PROVISION_DIR/setup/environment" /etc/environment
 echo "locales fixed"
 
 # update & upgrade the system
