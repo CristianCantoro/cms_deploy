@@ -77,9 +77,8 @@ echo "database installed"
 
 # Install CMS dependencies
 # (see: https://cms.readthedocs.io/en/v1.4/Installation.html)
-quiet_install build-essential openjdk-8-jdk-headless fp-compiler \
-    python3.6 python-future cppreference-doc-en-html cgroup-lite libcap-dev \
-    zip
+quiet_install build-essential openjdk-8-jdk-headless fp-compiler python3.6 \
+    cppreference-doc-en-html cgroup-lite libcap-dev zip
 echo "core dependencies installed"
 
 # Only if you are going to use pip/virtualenv to install python dependencies
@@ -160,28 +159,35 @@ usermod -a -G "$CMS_USERGROUP" "$CMS_USER"
 echo "change group ownership of $CMS_USER_HOME to $CMS_USERGROUP"
 chown -R "$CMS_USER:$CMS_USERGROUP" "$CMS_USER_HOME"
 
+# install
+cd "$CMS_BASEDIR" && pip3 install -r requirements.txt
+echo "requirements installed"
+
 # run CMS prerequisites file
 echo "build everything (as $CMS_USER)"
-cd "$CMS_BASEDIR" && su -c "./prerequisites.py build_isolate" "$CMS_USER"
-cd "$CMS_BASEDIR" && su -c "./prerequisites.py build" "$CMS_USER"
+cd "$CMS_BASEDIR" && su -c "python3 prerequisites.py build_isolate" "$CMS_USER"
+cd "$CMS_BASEDIR" && su -c "python3 prerequisites.py build" "$CMS_USER"
 echo "built done"
 
 echo "install everything"
-cd "$CMS_BASEDIR" && ./prerequisites.py -y install
+cd "$CMS_BASEDIR" && python3 prerequisites.py -y install
 echo "CMS prerequisites script run"
 
 # install cms
-cd "$CMS_BASEDIR" && ./setup.py build
+cd "$CMS_BASEDIR" && python3 setup.py build
 echo "CMS built"
 
-cd "$CMS_BASEDIR" && ./setup.py install
+cd "$CMS_BASEDIR" && python3 setup.py install
 echo "CMS installed"
 
+# cms.conf
 cd "$CMS_BASEDIR" && cp 'config/cms.conf' '/usr/local/etc/'
 chown "$CMS_USER:$CMS_USERGROUP" '/usr/local/etc/cms.conf'
+# cms.ranking.conf
 cd "$CMS_BASEDIR" && cp 'config/cms.ranking.conf' '/usr/local/etc/'
 chown "$CMS_USER:$CMS_USERGROUP" '/usr/local/etc/cms.ranking.conf'
-cd "$CMS_BASEDIR"
+# isolate
+chown "$CMS_USER:$CMS_USERGROUP" '/usr/local/etc/isolate'
 echo "CMS configuration files installed"
 
 # change owner of basedir
