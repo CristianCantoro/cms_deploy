@@ -43,10 +43,12 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vb| 
     # 1GB RAM
     vb.memory = "2048"
-
   end
+
   config.vm.hostname = 'cms'
   config.vm.network "private_network", type: "dhcp"
+
+  config.vm.network "forwarded_port", guest: 80, host: 9980
 
   ############################################################################
   ## Provision for all the machines
