@@ -117,6 +117,17 @@ else
   echo "skipping installation of texlive-full"
 fi
 
+# download pandoc
+if [ -n "$EXTRA_PANDOC_REPO" ]; then
+  tmpdir="$(mktemp --directory)"
+  wget --quiet \
+       -O "$tmpdir/$EXTRA_PANDOC_DEB" \
+      "$EXTRA_PANDOC_REPO/releases/download/\
+$EXTRA_PANDOC_VERSION/$EXTRA_PANDOC_DEB"
+  apt-get -qq -y install "$tmpdir/$EXTRA_PANDOC_DEB"
+  echo "clean system (apt-get autoremove)"
+fi
+
 # auto-clean
 apt-get -qq -y autoremove &>/dev/null
 echo "clean system (apt-get autoremove)"

@@ -85,8 +85,15 @@ echo "- PROVISION_DIR: $PROVISION_DIR"
 echo "- WORK_DIR: $WORK_DIR"
 echo "---"
 echo "Database vars"
-echo "CMS_DB_VERSION: $CMS_DB_VERSION"
+echo "- CMS_DB_VERSION: $CMS_DB_VERSION"
 echo "--------"
+
+if [ -n "$EXTRA_PANDOC_VERSION" ]; then
+   echo "Extra software"
+   echo "- EXTRA_PANDOC_REPO: $EXTRA_PANDOC_REPO"
+   echo "- EXTRA_PANDOC_VERSION: $EXTRA_PANDOC_VERSION"
+   echo "--------"
+fi
 
 # no dialog or questions
 export DEBIAN_FRONTEND=noninteractive
