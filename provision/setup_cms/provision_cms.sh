@@ -100,9 +100,9 @@ echo "nginx installed"
 
 # Optional
 # note: package gcj-jdk has no installation candidate on Ubuntu 18.04.5
-quiet_install  python2.7 php7.2-cli php7.2-fpm \
-    phppgadmin texlive-latex-base a2ps haskell-platform rustc \
-    mono-mcs
+quiet_install  python2.7 php7.2-cli php7.2-fpm phppgadmin \
+    texlive-latex-base texlive-xetex texlive-fonts-recommended \
+    a2ps haskell-platform rustc mono-mcs
 echo "additional packages installed"
 
 if $CMS_INSTALL_TEXLIVEFULL; then
