@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
-set -eu
-IFS=$'\n\t'
+SOURCED=false && [ "$0" = "$BASH_SOURCE" ] || SOURCED=true
+
+if ! $SOURCED; then
+  set -euo pipefail
+  IFS=$'\n\t'
+fi
 
 # Parse YAML file to bash variables
 #

@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
-set -euo pipefail
-IFS=$'\n\t'
+SOURCED=false && [ "$0" = "$BASH_SOURCE" ] || SOURCED=true
+
+if ! $SOURCED; then
+  set -euo pipefail
+  IFS=$'\n\t'
+fi
 
 # shellcheck disable=SC1091
 source '/tmp/provision/setup_cms/envvars.sh'
