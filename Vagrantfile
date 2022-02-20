@@ -67,6 +67,10 @@ Vagrant.configure("2") do |config|
     cms_provision.vm.hostname = 'cms-provision'
 
     cms_provision.vm.provision :shell, \
+      inline: "cat /vagrant/provision/setup/id_rsa.pub >> \
+                    /home/vagrant/.ssh/authorized_keys"
+
+    cms_provision.vm.provision :shell, \
       inline: "rsync -a '/vagrant/provision' '/tmp'"
 
     cms_provision.vm.provision :shell, \
@@ -119,6 +123,10 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "cms_ansible" do |cms_ansible|
     cms_ansible.vm.hostname = 'cms-ansible'
+
+    cms_ansible.vm.provision :shell, \
+      inline: "cat /vagrant/provision/setup/id_rsa.pub >> \
+                    /home/vagrant/.ssh/authorized_keys"
 
     cms_ansible.vm.provision :shell, \
       inline: "cat /vagrant/provision/setup/id_rsa.pub >> \
