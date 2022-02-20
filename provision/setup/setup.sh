@@ -7,6 +7,7 @@ if ! $SOURCED; then
 fi
 
 # this script is run as root
+# shellcheck disable=SC1091
 source '/tmp/provision/setup_cms/envvars.sh'
 
 function install_oh_my_zsh {

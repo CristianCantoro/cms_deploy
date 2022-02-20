@@ -3,6 +3,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # import variables
+# shellcheck disable=SC1091
 source '/tmp/provision/setup_cms/envvars.sh'
 
 THE_USER_HOME="$CMS_USER_HOME"
@@ -11,7 +12,7 @@ THE_USER_HOME="$CMS_USER_HOME"
 cp -r "$PROVISION_DIR/nvim/.vimrc" "$THE_USER_HOME"
 mkdir -p "$THE_USER_HOME/.vim/bundle/"
 [[ ! -L "$THE_USER_HOME/.vim/.vimrc" ]] && \
-  cd "$THE_USER_HOME/.vim/" && ln -s '../.vimrc'
+  cd "$THE_USER_HOME/.vim/" && ln -s '../.vimrc' .
 [[ ! -L "$THE_USER_HOME/.vim/init.vim" ]] && \
   cd "$THE_USER_HOME/.vim/" && ln -s '../.vimrc' 'init.vim'
 echo ".vimrc installed"
